@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: mvn spring-boot:run -Dspring.profiles.active=dev,docker-mysql
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+      - .:/code
+  db:
+    image: percona/percona-server:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: 'file_processor'
+      MYSQL_ROOT_PASSWORD: 'root'
+  
